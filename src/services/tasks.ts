@@ -5,7 +5,7 @@ export interface Task {
   created_at: string
   title: string
   done: boolean
-  user_id: string | null
+  user_id: string | null // null untill authentication is implemented
 }
 
 // FETCH tasks
@@ -55,5 +55,5 @@ export async function deleteTask(id: string) {
     .delete()
     .eq('id', id)
 
-    if (error) throw error
+  if (error) throw error
 }
