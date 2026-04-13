@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { createTask, fetchTasks, updateTask, type Task } from './services/tasks'
+import { createTask, deleteTask, fetchTasks, updateTask, type Task } from './services/tasks'
 
 
 function App() {
@@ -18,6 +18,8 @@ function App() {
 
   }, [])
 
+
+  //  --- HANDLERS ---
   async function newTaskHandler(e: React.FormEvent) {
     e.preventDefault()
 
@@ -29,6 +31,11 @@ function App() {
   async function taskDoneHandler(id: string, done: boolean) {
     const updatedTask = await updateTask(id, !done)
     setTasks(prev => prev.map(t => t.id === id ? updatedTask : t))
+  }
+
+  async function deleteTaskHandler(id: string) {
+    await deleteTask(id)
+    setTasks(prev => prev.filter(t => t.id !== id))
   }
 
   return (
@@ -48,6 +55,7 @@ function App() {
               onChange={() => taskDoneHandler(val.id, val.done)}
             />
             <label htmlFor={val.id}>{val.title}</label>
+            <button type="button" onClick={() => deleteTaskHandler(val.id)}>delete</button>
           </div>
         ))}
       </div >
