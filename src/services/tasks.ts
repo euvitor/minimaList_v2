@@ -5,23 +5,23 @@ export interface Task {
   created_at: string
   title: string
   done: boolean
-  user_id: string | null // null untill authentication is implemented
+  user_id: string | null
 }
 
 // FETCH tasks
 export async function fetchTasks(): Promise<Task[]> {
-  const { data, error } = await supabase
+  const { data: tasksData, error } = await supabase
     .from('tasks')
     .select('*')
 
   if (error) throw error
 
-  return data ?? []
+  return tasksData ?? []
 }
 
 // CREATE tasks
 export async function createTask(taskTitle: string): Promise<Task> {
-  const { data, error } = await supabase
+  const { data: tasksData, error } = await supabase
     .from('tasks')
     .insert([
       { title: taskTitle },
@@ -31,25 +31,25 @@ export async function createTask(taskTitle: string): Promise<Task> {
 
   if (error) throw error
 
-  return data
+  return tasksData
 }
 
 // UPDATE tasks
 export async function updateTask(id: string, done: boolean): Promise<Task> {
-  const { data, error } = await supabase
+  const { data: tasksData, error } = await supabase
     .from('tasks')
-    .update({ done: done })
+    .update({ done })
     .eq('id', id)
     .select()
     .single()
 
   if (error) throw error
 
-  return data
+  return tasksData
 }
 
 // DELETE tasks
-export async function deleteTask(id: string) {
+export async function deleteTask(id: string): Promise<void> {
   const { error } = await supabase
     .from('tasks')
     .delete()
