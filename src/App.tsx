@@ -2,30 +2,38 @@ import React, { useContext, useEffect, useState } from 'react'
 import { createTask, deleteTask, fetchTasks, updateTask, type Task } from './services/tasks'
 import { Login } from './components/Login'
 import { AuthContext } from './contexts/AuthContext'
+import { supabase } from './lib/supabaseClient'
 
 
 function App() {
-  //  --- STATES ---
   const { logged, loading } = useContext(AuthContext)
   const [tasks, setTasks] = useState<Task[]>([])
   const [newTaskTitle, setNewTaskTitle] = useState<string>('')
   const [error, setError] = useState<string | null>(null)
 
-  // Search for tasks once at first render - [] avoid refetch on each render
   useEffect(() => {
     async function loadTasks() {
-      const data: Task[] = await fetchTasks()
-      setTasks(data)
+    setError(null)
+
+      try {
+        const data: Task[] = await fetchTasks()
+        setTasks(data)
+      } catch {
+        setError("Error, can't load the tasks. Try again")
+      }
     }
 
-    loadTasks()
+    if (logged) {
+      loadTasks()
+    } else {
+      setTasks([])
+    }
 
-  }, [])
+  }, [logged])
 
-  //  --- HANDLERS ---
-  // Handlers updates the local state without refetch
   async function newTaskHandler(e: React.FormEvent) {
     e.preventDefault()
+    setError(null)
 
     try {
       const newTask = await createTask(newTaskTitle)
@@ -37,6 +45,8 @@ function App() {
   }
 
   async function taskDoneHandler(id: string, done: boolean) {
+    setError(null)
+
     try {
       const updatedTask = await updateTask(id, !done)
       setTasks(prev => prev.map(t => t.id === id ? updatedTask : t))
@@ -45,8 +55,9 @@ function App() {
     }
   }
 
-  // Delete confirmed by the absence of error
   async function deleteTaskHandler(id: string) {
+    setError(null)
+
     try {
       await deleteTask(id)
       setTasks(prev => prev.filter(t => t.id !== id))
@@ -55,30 +66,40 @@ function App() {
     }
   }
 
-  if (loading) { return (<p>Loaging...</p>) }
+  async function logoutHandler() {
+    setError(null)
+
+    const { error: logoutError } = await supabase.auth.signOut()
+    if (logoutError) {
+      setError('Logout error. Please try again.')
+    }
+  }
+
+  if (loading) { return (<p>Loading...</p>) }
   if (!logged) { return <Login /> }
   return (
     <>
-      {/* --- TASK FORM --- */}
+      <button onClick={logoutHandler}>Logout</button>
+
       <form onSubmit={newTaskHandler} className='newTaskContainer'>
         <label htmlFor="newTaskInput">New Task:</label>
         <input type="text" placeholder='to-do task here' value={newTaskTitle} onChange={(e) => setNewTaskTitle(e.target.value)} />
         <input type="submit" value="Save" />
       </form>
 
-      {/* --- TASK LIST --- */}
       {error && <p className='error'>{error}</p>}
+
       <div className='taskList'>
-        {tasks.map((val: Task) => (
-          <div key={val.id}>
+        {tasks.map((currentTask: Task) => (
+          <div key={currentTask.id}>
             <input
               type="checkbox"
-              id={val.id}
-              checked={val.done}
-              onChange={() => taskDoneHandler(val.id, val.done)}
+              id={currentTask.id}
+              checked={currentTask.done}
+              onChange={() => taskDoneHandler(currentTask.id, currentTask.done)}
             />
-            <label htmlFor={val.id}>{val.title}</label>
-            <button type="button" onClick={() => deleteTaskHandler(val.id)}>delete</button>
+            <label htmlFor={currentTask.id}>{currentTask.title}</label>
+            <button type="button" onClick={() => deleteTaskHandler(currentTask.id)}>delete</button>
           </div>
         ))}
       </div >
