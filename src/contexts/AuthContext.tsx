@@ -11,6 +11,7 @@ interface AuthContextType {
 }
 
 // Default values used only if a component  is consumed outside AuthProvider
+// eslint-disable-next-line react-refresh/only-export-components
 export const AuthContext = createContext<AuthContextType>({
     logged: false,
     user: null,

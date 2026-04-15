@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { createTask, deleteTask, fetchTasks, updateTask, type Task } from './services/tasks'
+import { Login } from './components/Login'
+import { AuthContext } from './contexts/AuthContext'
 
 
 function App() {
   //  --- STATES ---
+  const { logged, loading } = useContext(AuthContext)
   const [tasks, setTasks] = useState<Task[]>([])
   const [newTaskTitle, setNewTaskTitle] = useState<string>('')
   const [error, setError] = useState<string | null>(null)
-
-  console.log(tasks)
 
   // Search for tasks once at first render - [] avoid refetch on each render
   useEffect(() => {
@@ -54,6 +55,8 @@ function App() {
     }
   }
 
+  if (loading) { return (<p>Loaging...</p>) }
+  if (!logged) { return <Login /> }
   return (
     <>
       {/* --- TASK FORM --- */}
