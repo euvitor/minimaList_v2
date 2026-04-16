@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 
-export function Login() {
+export function LoginForm() {
     const [email, setEmail] = useState<string>('')
     const [password, setPassword] = useState<string>('')
     const [error, setError] = useState<string | null>(null)
@@ -17,10 +17,10 @@ export function Login() {
     return (
         <form onSubmit={loginHandler}>
             <label htmlFor="email">Email:</label>
-            <input type="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+            <input type="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} /> <br />
 
             <label htmlFor="password">Password:</label>
-            <input type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+            <input type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} /> <br />
 
             <input type="submit" value="Login" />
             {error && <p className="error">Login error: {error}</p>}

@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { createTask, deleteTask, fetchTasks, updateTask, type Task } from './services/tasks'
-import { Login } from './components/Login'
 import { AuthContext } from './contexts/AuthContext'
 import { supabase } from './lib/supabaseClient'
+import Hero from './pages/Hero'
 
 
 function App() {
@@ -76,7 +76,7 @@ function App() {
   }
 
   if (loading) { return (<p>Loading...</p>) }
-  if (!logged) { return <Login /> }
+  if (!logged) { return <Hero /> }
   return (
     <>
       <button onClick={logoutHandler}>Logout</button>
