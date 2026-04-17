@@ -1,10 +1,7 @@
 import { supabase } from "../lib/supabaseClient";
+import type { Tables } from "../types/database.types";
 
-export interface Profile {
-    id: string
-    created_at: string
-    name: string
-}
+export type Profile = Tables<'profiles'>
 
 export async function registerUser(userName: string, userEmail: string, userPassword: string): Promise<void> {
     const { data: newUserData, error: signUpError } = await supabase.auth.signUp({
@@ -16,7 +13,7 @@ export async function registerUser(userName: string, userEmail: string, userPass
 
 
 
-    const {error: insertError } = await supabase
+    const { error: insertError } = await supabase
         .from('profiles')
         .insert([
             {
@@ -28,7 +25,7 @@ export async function registerUser(userName: string, userEmail: string, userPass
         .single()
 
     if (insertError) throw insertError
-    
+
 
 }
 

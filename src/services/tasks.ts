@@ -1,12 +1,7 @@
 import { supabase } from "../lib/supabaseClient"
+import type { Tables } from "../types/database.types"
 
-export interface Task {
-  id: string
-  created_at: string
-  title: string
-  done: boolean
-  user_id: string | null
-}
+export type Task = Tables<'tasks'>
 
 // FETCH tasks
 export async function fetchTasks(): Promise<Task[]> {
