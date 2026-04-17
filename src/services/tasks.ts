@@ -29,7 +29,7 @@ export async function createTask(taskTitle: string): Promise<Task> {
     .select()
     .single()
 
-  if (error) throw error
+  if (error) throw error.message
 
   return tasksData
 }

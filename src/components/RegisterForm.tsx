@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { registerUser } from "../services/auth"
 
 export type RegisterErrors = {
     name: string | null,
@@ -12,12 +13,14 @@ export function RegisterForm() {
     const [email, setEmail] = useState<string>('')
     const [password, setPassword] = useState<string>('')
     const [confirmPassword, setConfirmPassword] = useState<string>('')
+    const [signUpError, setSignUpError] = useState<string | null>(null)
     const [errors, setErrors] = useState<RegisterErrors>({
         name: null,
         email: null,
         password: null,
         confirmPassword: null
     })
+
 
     function validateRegister(): RegisterErrors {
         const newErrors: RegisterErrors = {
@@ -36,22 +39,46 @@ export function RegisterForm() {
         if (!password) {
             newErrors.password = 'Password field must be filled!'
         }
+        if (!confirmPassword) {
+            newErrors.confirmPassword = 'Password must be confirmed!'
+        } else if (confirmPassword !== password) {
+            newErrors.confirmPassword = 'Passwords must be the same!'
+        }
 
         return newErrors
     }
 
-    useEffect(()=>{
-        if(!confirmPassword) return
+    useEffect(() => {
+        if (!confirmPassword) return
         const timer = setTimeout(() => {
-            if(confirmPassword !== password){
-                
+            const result = validateRegister()
+            setErrors(prev => ({ ...prev, confirmPassword: result.confirmPassword }))
+        }, 1000)
+
+        return () => clearTimeout(timer)
+    }, [confirmPassword])
+
+    async function handleSubmit(e: React.FormEvent) {
+        e.preventDefault()
+        const result = validateRegister()
+        setErrors(result)
+
+        const hasErrors = Object.values(result).some(value => value !== null)
+
+        if (!hasErrors) {
+            try {
+                await registerUser(name, email, password)
+            } catch (error: unknown) {
+                if (error instanceof Error) {
+                    setSignUpError(error.message)
+                }
             }
-        }, timeout);
-    })
+        }
+    }
 
     return (
         <>
-            <form action="">
+            <form onSubmit={handleSubmit}>
                 <label htmlFor="name">Name</label>
                 <input id="name" type="text" name="name" value={name} onChange={(e) => setName(e.target.value)} />
                 {errors.name && <p>{errors.name}</p>}
@@ -67,6 +94,7 @@ export function RegisterForm() {
                 <label htmlFor="confirmPassword">Confirm password</label>
                 <input id="confirmPassword" type="password" name="confirmPassword" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
                 {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
+                {signUpError && <p>{signUpError}</p>}
 
                 <input type="submit" value="Register" />
             </form>
