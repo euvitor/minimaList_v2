@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 export type RegisterErrors = {
     name: string | null,
@@ -19,24 +19,54 @@ export function RegisterForm() {
         confirmPassword: null
     })
 
+    function validateRegister(): RegisterErrors {
+        const newErrors: RegisterErrors = {
+            name: null,
+            email: null,
+            password: null,
+            confirmPassword: null
+        }
+
+        if (!name) {
+            newErrors.name = 'Name field must be filled!'
+        }
+        if (!email) {
+            newErrors.email = 'Email field must be filled!'
+        }
+        if (!password) {
+            newErrors.password = 'Password field must be filled!'
+        }
+
+        return newErrors
+    }
+
+    useEffect(()=>{
+        if(!confirmPassword) return
+        const timer = setTimeout(() => {
+            if(confirmPassword !== password){
+                
+            }
+        }, timeout);
+    })
+
     return (
         <>
             <form action="">
                 <label htmlFor="name">Name</label>
-                <input type="text" name="name" onChange={(e) => setName(e.target.value)} />
-                {errors.name ?? <p>{errors.name}</p>}
+                <input id="name" type="text" name="name" value={name} onChange={(e) => setName(e.target.value)} />
+                {errors.name && <p>{errors.name}</p>}
 
                 <label htmlFor="email">Email</label>
-                <input type="email" name="email" onChange={(e) => setEmail(e.target.value)} />
-                {errors.email ?? <p>{errors.email}</p>}
+                <input id="email" type="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                {errors.email && <p>{errors.email}</p>}
 
                 <label htmlFor="password">Password</label>
-                <input type="password" name="password" onChange={(e) => setPassword(e.target.value)} />
-                {errors.password ?? <p>{errors.password}</p>}
+                <input id="password" type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                {errors.password && <p>{errors.password}</p>}
 
                 <label htmlFor="confirmPassword">Confirm password</label>
-                <input type="password" name="confirmPassword" onChange={(e) => setConfirmPassword(e.target.value)} />
-                {errors.confirmPassword ?? <p>{errors.confirmPassword}</p>}
+                <input id="confirmPassword" type="password" name="confirmPassword" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
+                {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
 
                 <input type="submit" value="Register" />
             </form>

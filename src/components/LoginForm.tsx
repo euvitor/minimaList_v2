@@ -17,10 +17,10 @@ export function LoginForm() {
     return (
         <form onSubmit={loginHandler}>
             <label htmlFor="email">Email:</label>
-            <input type="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} /> <br />
+            <input type="email" name="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} /> <br />
 
             <label htmlFor="password">Password:</label>
-            <input type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} /> <br />
+            <input type="password" name="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} /> <br />
 
             <input type="submit" value="Login" />
             {error && <p className="error">Login error: {error}</p>}
