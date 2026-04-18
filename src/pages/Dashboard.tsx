@@ -1,14 +1,14 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { createTask, deleteTask, fetchTasks, updateTask, type Task } from '../services/tasks'
-import { AuthContext } from '../contexts/AuthContext'
 import { supabase } from '../lib/supabaseClient'
+import { useNavigate } from 'react-router-dom'
 
 
 function Dashboard() {
-    const { logged, loading } = useContext(AuthContext)
     const [tasks, setTasks] = useState<Task[]>([])
     const [newTaskTitle, setNewTaskTitle] = useState<string>('')
     const [error, setError] = useState<string | null>(null)
+    const navigate = useNavigate()
 
     useEffect(() => {
         async function loadTasks() {
@@ -22,13 +22,9 @@ function Dashboard() {
             }
         }
 
-        if (logged) {
-            loadTasks()
-        } else {
-            setTasks([])
-        }
+        loadTasks()
 
-    }, [logged])
+    }, [])
 
     async function newTaskHandler(e: React.FormEvent) {
         e.preventDefault()
@@ -71,6 +67,8 @@ function Dashboard() {
         const { error: logoutError } = await supabase.auth.signOut()
         if (logoutError) {
             setError('Logout error. Please try again.')
+        } else {
+            navigate('/')
         }
     }
     return (

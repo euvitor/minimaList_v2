@@ -11,8 +11,6 @@ export async function registerUser(userName: string, userEmail: string, userPass
     if (signUpError) throw signUpError
     if (!newUserData.user) throw new Error('User creation failed')
 
-
-
     const { error: insertError } = await supabase
         .from('profiles')
         .insert([

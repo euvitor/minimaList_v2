@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { registerUser } from "../services/auth"
+import { useNavigate } from "react-router-dom"
 
 export type RegisterErrors = {
     name: string | null,
@@ -20,6 +21,7 @@ export function RegisterForm() {
         password: null,
         confirmPassword: null
     })
+    const navigate = useNavigate()
 
 
     function validateRegister(): RegisterErrors {
@@ -68,6 +70,7 @@ export function RegisterForm() {
         if (!hasErrors) {
             try {
                 await registerUser(name, email, password)
+                navigate('/dashboard')
             } catch (error: unknown) {
                 if (error instanceof Error) {
                     setSignUpError(error.message)
