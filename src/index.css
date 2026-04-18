@@ -1,1 +1,23 @@
-/* @import "tailwindcss"; */
+ @import "tailwindcss";
+ @variant dark (&:where(.dark, .dark *));
+
+ @theme {
+     --font-display: 'Erode', Georgia, serif;
+ }
+
+ body {
+     background-color: hsl(40, 80%, 99%);
+     background-image:
+         linear-gradient(rgba(10, 10, 200, 0.08) 2px, transparent 1px),
+         linear-gradient(90deg, rgba(10, 10, 200, 0.08) 2px, transparent 1px);
+     background-size: 28px 28px;
+     min-height: 100vh;
+ }
+
+ .dark body {
+     background-color: hsl(240, 9%, 5%);
+     background-image:
+         linear-gradient(rgba(111, 169, 255, 0.04) 2px, transparent 1px),
+         linear-gradient(90deg, rgba(111, 169, 255, 0.04) 2px, transparent 1px);
+     background-size: 28px 28px;
+ }

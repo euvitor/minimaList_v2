@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { registerUser } from "../services/auth"
 import { useNavigate } from "react-router-dom"
 
@@ -23,8 +23,7 @@ export function RegisterForm() {
     })
     const navigate = useNavigate()
 
-
-    function validateRegister(): RegisterErrors {
+    const validateRegister = useCallback((): RegisterErrors => {
         const newErrors: RegisterErrors = {
             name: null,
             email: null,
@@ -48,7 +47,8 @@ export function RegisterForm() {
         }
 
         return newErrors
-    }
+    }, [name, email, password, confirmPassword])
+
 
     useEffect(() => {
         if (!confirmPassword) return
@@ -58,7 +58,7 @@ export function RegisterForm() {
         }, 1000)
 
         return () => clearTimeout(timer)
-    }, [confirmPassword])
+    }, [confirmPassword, validateRegister])
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault()
