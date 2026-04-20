@@ -128,7 +128,7 @@ function Dashboard() {
                             shadow-[6px_6px_0_rgba(0,0,0,0.12)] dark:shadow-[6px_6px_0_rgba(0,0,0,.7)]
                             rounded-sm px-10 py-12
                             flex flex-col items-center gap-6
-                            max-w-md w-full">
+                            max-w-md w-full"> 
                 <form onSubmit={newTaskHandler} className='w-full flex items-center gap-3'>
                     <label htmlFor="newTaskInput" className='sr-only'>New Task:</label>
                     <input
