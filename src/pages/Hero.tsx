@@ -40,7 +40,7 @@ function Hero() {
             </div>
 
             {/* Glass card */}
-            <div className="backdrop-blur-md
+            <div className="backdrop-blur-lg
                             bg-white/40 dark:bg-white/2
                             border border-black/20 dark:border-white/10
                             shadow-[6px_6px_0_rgba(0,0,0,0.2)] dark:shadow-[6px_6px_0_rgba(0,0,0,.7)]
