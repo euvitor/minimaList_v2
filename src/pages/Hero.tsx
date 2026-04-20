@@ -11,25 +11,12 @@ function Hero() {
 
             {/* Controls */}
             <div className="fixed top-4 right-4 flex items-center gap-2">
-                <a
-                    href="https://github.com/euvitor"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-xs font-mono px-3 py-1 rounded border
-                               text-gray-600 dark:text-white/70
-                               border-black/15 dark:border-white/15
-                               bg-white/40 dark:bg-white/5
-                               backdrop-blur-sm
-                               hover:bg-white/60 dark:hover:bg-white/10
-                               transition-all"
-                >
-                    @euvitor
-                </a>
                 <button
                     type="button"
                     onClick={toggleTheme}
                     className="text-xs px-3 py-1 rounded border
                                border-black/15 dark:border-white/15
+                               shadow-[3px_3px_0_rgba(0,0,0,0.1)] dark:shadow-[3px_3px_0_rgba(0,0,0,0.35)]
                                bg-white/40 dark:bg-white/5
                                backdrop-blur-sm
                                hover:bg-white/60 dark:hover:bg-white/10
@@ -38,12 +25,29 @@ function Hero() {
                     {theme === 'dark' ? '☀️' : '🌙'}
                 </button>
             </div>
+            <div className="fixed top-4 left-4 flex items-center gap-2">
+                <a
+                    href="https://github.com/euvitor"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs font-mono px-3 py-1 rounded border
+                               text-gray-600 dark:text-white/70
+                               border-black/15 dark:border-white/15
+                               shadow-[3px_3px_0_rgba(0,0,0,0.1)] dark:shadow-[3px_3px_0_rgba(0,0,0,0.35)]
+                               bg-white/40 dark:bg-white/5
+                               backdrop-blur-sm
+                               hover:bg-white/60 dark:hover:bg-white/10
+                               transition-all"
+                >
+                    @euvitor
+                </a>
+            </div>
 
             {/* Glass card */}
             <div className="backdrop-blur-lg
                             bg-white/40 dark:bg-white/2
                             border border-black/20 dark:border-white/10
-                            shadow-[6px_6px_0_rgba(0,0,0,0.2)] dark:shadow-[6px_6px_0_rgba(0,0,0,.7)]
+                            shadow-[6px_6px_0_rgba(0,0,0,0.12)] dark:shadow-[6px_6px_0_rgba(0,0,0,.7)]
                             rounded-sm px-10 py-12
                             flex flex-col items-center gap-6
                             max-w-md w-full">
