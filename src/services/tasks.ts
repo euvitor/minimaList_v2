@@ -1,9 +1,14 @@
+/*
+  Camada de acesso a dados de tarefas (independente de UI).
+  Componentes chamam estes helpers em vez de usar Supabase direto. Supõe que o RLS
+  no Supabase já limita `tasks` ao usuário autenticado.
+*/
+
 import { supabase } from "../lib/supabaseClient"
 import type { Tables } from "../types/database.types"
 
 export type Task = Tables<'tasks'>
 
-// FETCH tasks
 export async function fetchTasks(): Promise<Task[]> {
   const { data: tasksData, error } = await supabase
     .from('tasks')
@@ -14,7 +19,7 @@ export async function fetchTasks(): Promise<Task[]> {
   return tasksData ?? []
 }
 
-// CREATE tasks
+// `.select().single()` retorna a linha inserida para a UI atualizar sem refetch.
 export async function createTask(taskTitle: string): Promise<Task> {
   const { data: tasksData, error } = await supabase
     .from('tasks')
@@ -29,7 +34,6 @@ export async function createTask(taskTitle: string): Promise<Task> {
   return tasksData
 }
 
-// UPDATE tasks
 export async function updateTask(id: string, done: boolean): Promise<Task> {
   const { data: tasksData, error } = await supabase
     .from('tasks')
@@ -43,7 +47,6 @@ export async function updateTask(id: string, done: boolean): Promise<Task> {
   return tasksData
 }
 
-// DELETE tasks
 export async function deleteTask(id: string): Promise<void> {
   const { error } = await supabase
     .from('tasks')

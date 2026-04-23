@@ -1,8 +1,15 @@
+/*
+  Landing page: vitrine minimalista + entrada para autenticação.
+  O modal expõe um handle imperativo (ref) para abrir/fechar sem levar estado de modal
+  para esta página.
+*/
+
 import { useRef } from "react";
 import { AuthModal, type AuthModalHandle } from "../components/AuthModal";
 import { useTheme } from "../hooks/useTheme";
 
 function Hero() {
+    // Handle imperativo: o CTA abre o modal sem estado extra nesta página.
     const authModalRef = useRef<AuthModalHandle>(null)
     const { theme, toggleTheme } = useTheme()
 

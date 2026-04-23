@@ -1,3 +1,9 @@
+/*
+  Área autenticada: CRUD de tarefas via services + estado mínimo de UI.
+  Mantém um cache local `tasks[]` e o atualiza após cada operação (sem refetch completo)
+  para a UI ficar responsiva; erros aparecem em uma única mensagem inline.
+*/
+
 import React, { useEffect, useState } from 'react'
 import { createTask, deleteTask, fetchTasks, updateTask, type Task } from '../services/tasks'
 import { supabase } from '../lib/supabaseClient'
@@ -13,7 +19,7 @@ function Dashboard() {
     const navigate = useNavigate()
     const { theme, toggleTheme } = useTheme()
 
-
+    // Carregamento inicial no mount; a camada de service esconde detalhes do Supabase da página.
     useEffect(() => {
         async function loadTasks() {
             setError(null)
@@ -67,7 +73,7 @@ function Dashboard() {
 
     async function logoutHandler() {
         setError(null)
-
+        // Logout é uma preocupação “de sessão”; ao sair, voltamos para a rota pública.
         const { error: logoutError } = await supabase.auth.signOut()
         if (logoutError) {
             setError('Logout error. Please try again.')
@@ -128,7 +134,7 @@ function Dashboard() {
                             shadow-[6px_6px_0_rgba(0,0,0,0.12)] dark:shadow-[6px_6px_0_rgba(0,0,0,.7)]
                             rounded-sm px-10 py-12
                             flex flex-col items-center gap-6
-                            max-w-md w-full"> 
+                            max-w-md w-full">
                 <form onSubmit={newTaskHandler} className='w-full flex items-center gap-3'>
                     <label htmlFor="newTaskInput" className='sr-only'>New Task:</label>
                     <input

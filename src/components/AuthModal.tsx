@@ -1,3 +1,9 @@
+/*
+  Modal de autenticação usado na landing page.
+  Expõe um handle imperativo via ref (open/close) para disparar o modal sem
+  gerenciar estado de visibilidade no pai. Clique fora fecha; clique dentro não.
+*/
+
 import { forwardRef, useImperativeHandle, useState } from "react";
 import { LoginForm } from "./LoginForm";
 import { RegisterForm } from "./RegisterForm";
@@ -15,7 +21,7 @@ export const AuthModal = forwardRef<AuthModalHandle>(function AuthModal(_, ref) 
         open: () => setIsOpen(true),
         close: () => setIsOpen(false),
     }))
-
+    // Evita renderizar overlay até abrir (DOM mais simples e sem capturar cliques ao fundo).
     if (!isOpen) return null
 
     return (

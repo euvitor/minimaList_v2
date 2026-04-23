@@ -1,3 +1,9 @@
+/*
+  Guard de rota: só renderiza `children` quando autenticado; caso contrário,
+  redireciona para `/`. Enquanto o AuthContext resolve a sessão inicial, exibe um
+  loading mínimo para evitar “piscar” entre telas.
+*/
+
 import type React from "react";
 import { useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";

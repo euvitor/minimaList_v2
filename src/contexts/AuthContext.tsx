@@ -1,3 +1,9 @@
+/*
+  Supabase auth state for the whole SPA. Initial `getSession()` hydrates from
+  persisted storage; `onAuthStateChange` keeps `user` in sync after login,
+  logout, token refresh, or other tab sessions.
+*/
+
 import type { User } from "@supabase/supabase-js"
 import { createContext, useEffect, useState } from "react"
 import { supabase } from "../lib/supabaseClient"
@@ -56,4 +62,3 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         </AuthContext.Provider>
     )
 }
- 

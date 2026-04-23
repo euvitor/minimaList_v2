@@ -1,3 +1,9 @@
+/*
+  Cadastro com validação client-side.
+  Usa um service (`registerUser`) para manter detalhes do Supabase fora da UI.
+  A validação do "confirm password" é debounced para evitar erros enquanto o usuário digita.
+*/
+
 import { useCallback, useEffect, useState } from "react"
 import { registerUser } from "../services/auth"
 import { useNavigate } from "react-router-dom"

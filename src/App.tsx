@@ -1,3 +1,9 @@
+/*
+  Rotas da aplicação (react-router-dom).
+  A home (/) é pública; o /dashboard fica protegido por PrivateRoute (redireciona
+  quando não autenticado e espera o estado inicial de sessão resolver).
+*/
+
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 import Dashboard from "./pages/Dashboard"
 import Hero from "./pages/Hero"

@@ -1,3 +1,9 @@
+/*
+  Login por email/senha via Supabase.
+  Ao autenticar, navegamos para `/dashboard` imediatamente; o AuthContext também sincroniza
+  a sessão em paralelo, mas a navegação deixa a UX mais direta.
+*/
+
 import { useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 import { useNavigate } from "react-router-dom";

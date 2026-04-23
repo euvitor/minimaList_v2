@@ -1,3 +1,9 @@
+/*
+  Services de autenticação (independente de UI).
+  Centraliza chamadas do Supabase fora dos componentes. Após o sign-up, criamos também
+  um registro em `profiles` (dados do app) ligado ao id do usuário no auth.
+*/
+
 import { supabase } from "../lib/supabaseClient";
 import type { Tables } from "../types/database.types";
 
@@ -12,6 +18,7 @@ export async function registerUser(userName: string, userEmail: string, userPass
     if (!newUserData.user) throw new Error('User creation failed')
 
     const { error: insertError } = await supabase
+        // `profiles` guarda dados do app (ex.: nome) separados do `auth.users` do Supabase.
         .from('profiles')
         .insert([
             {
