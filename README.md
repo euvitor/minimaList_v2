@@ -1,51 +1,66 @@
-## MinimaList v2
+# MinimaList v2
 
-App minimalista de tarefas (to-do) com autenticação via Supabase, tema claro/escuro e rotas protegidas.
+Aplicação de tarefas desenvolvida com React, TypeScript e Supabase, com foco em autenticação, rotas protegidas e controle de acesso por usuário.
+
+O projeto surgiu como estudo prático para entender o Supabase em um fluxo real, mantendo uma estrutura organizada e coerente mesmo em um escopo simples.
 
 ## Stack
 
-- React + Vite
+- React
+- TypeScript
+- Vite
 - Tailwind CSS
 - React Router
 - Supabase (Auth + Postgres)
 
-## Requisitos
+## Funcionalidades
 
-- Node.js (recomendado: 18+)
+- Cadastro e login com Supabase Auth
+- Sessão persistida
+- Dashboard com rota protegida
+- CRUD de tarefas
+- Tema claro/escuro
+- Segurança com RLS no banco
+
+## Decisões técnicas
+
+- **Auth em contexto** para disponibilizar a sessão globalmente sem prop drilling
+- **PrivateRoute com `loading`** para evitar redirecionamento incorreto durante a validação da sessão
+- **Services isolados** para centralizar integração com Supabase
+- **RLS** para garantir que cada usuário acesse apenas as próprias tarefas
+
+## Estrutura
+
+```txt
+src/
+├── components/
+├── contexts/
+├── hooks/
+├── lib/
+├── pages/
+├── routes/
+├── services/
+├── types/
+├── App.tsx
+└── main.tsx
+```
+
+## Como rodar
+
+### Pré-requisitos
+
+- Node.js 18+
 - npm
 
-## Como rodar (dev)
-
-1) Instale dependências:
+### Instalação
 
 ```bash
+git clone https://github.com/euvitor/minimaList_v2.git
+cd minimaList_v2
 npm install
 ```
 
-2) Configure as variáveis de ambiente:
-
-- Copie `.env.example` para `.env.local`
-- Preencha com seus valores do Supabase
-
-3) Rode o projeto:
-
-```bash
-npm run dev
-```
-
-## Build / Preview
-
-```bash
-npm run build
-npm run preview
-```
-
-## Variáveis de ambiente (Supabase)
-
-Este projeto usa variáveis do Vite (prefixo `VITE_`):
-
-- `VITE_SUPABASE_URL`
-- `VITE_SUPABASE_ANON_KEY`
+### Variáveis de ambiente
 
 Crie um arquivo `.env.local` na raiz:
 
@@ -54,110 +69,35 @@ VITE_SUPABASE_URL="https://xxxx.supabase.co"
 VITE_SUPABASE_ANON_KEY="sua_anon_key"
 ```
 
-> A **anon key** vai para o bundle do frontend mesmo. A segurança deve ser feita com **RLS** no Supabase.
+> A `anon key` fica no frontend. A proteção dos dados é feita pelas políticas de RLS no Supabase.
 
-## Visão geral da arquitetura
+### Desenvolvimento
 
-- **Entrada**: `src/main.tsx` monta o React e registra providers globais.
-- **Rotas**: `src/App.tsx` define rotas públicas e privadas.
-- **Auth**:
-  - `src/contexts/AuthContext.tsx` hidrata sessão inicial (`getSession`) e mantém sync com `onAuthStateChange`.
-  - `src/routes/PrivateRoute.tsx` protege o `/dashboard` e espera o estado de auth resolver (evita “piscar”).
-- **Tema**: `src/hooks/useTheme.ts` alterna a classe `dark` no `<html>` e persiste preferência no `localStorage`.
-- **Acesso a dados**:
-  - `src/services/tasks.ts`: CRUD de tarefas.
-  - `src/services/auth.ts`: cadastro e criação do `profile`.
-  - `src/lib/supabaseClient.ts`: cliente único do Supabase (tipado com `Database`).
+```bash
+npm run dev
+```
 
-## Banco de dados (referência rápida)
+### Build
 
-Tabelas usadas no app (a partir dos types):
-
-- `tasks`: tarefas do usuário (assumindo RLS para restringir por usuário)
-- `profiles`: dados de perfil do app (ex.: nome)
-
-## Tipos do Supabase
-
-O arquivo `src/types/database.types.ts` normalmente é **gerado automaticamente** a partir do schema do Supabase.
-Se o schema mudar, re-gerar esses tipos evita divergências entre frontend e banco.
+```bash
+npm run build
+npm run preview
+```
 
 ## Scripts
 
-- `npm run dev`: servidor de desenvolvimento
-- `npm run build`: build de produção
-- `npm run preview`: preview do build
-- `npm run lint`: lint do projeto
+- `npm run dev`
+- `npm run build`
+- `npm run preview`
+- `npm run lint`
 
-# React + TypeScript + Vite
+## Próximos passos
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+- Consolidar a autenticação na camada de `services`
+- Adicionar datas, tags e anexos
+- Explorar compartilhamento de tarefas entre usuários
+- Avaliar uso de Supabase Realtime
 
-Currently, two official plugins are available:
+## Status
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Projeto desenvolvido como estudo prático com foco em autenticação, segurança e organização de código.
